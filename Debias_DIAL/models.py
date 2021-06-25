@@ -199,10 +199,6 @@ class MainAdversarialClassifier(Model):
             if key[7:] in self.protectClassifier.state_dict().keys():
                 print(f"load weight of {key[7:]}")
                 self.protectClassifier.state_dict()[key[7:]].copy_(weight)
-        # if self.fixProtectParams:
-        #     #fix the parameters of protected Attribution classifier
-        #     for p in self.protectClassifier.parameters():
-        #         p.requires_grad = False
 
         self.scorer = nn.Sequential(*main_layers)
         self.loss = nn.CrossEntropyLoss()
@@ -314,42 +310,7 @@ class MainAdversarialClassifier(Model):
         output = {"y_hat": y_hat}
         with torch.no_grad():
             race_hat2 = torch.argmax(self.protectClassifier(enc_moji2),dim=1)
-        # loss_tmp = self.loss(scores, sent_label)
-        # loss_tmp.backward()
-        # for p in self.mojiEncoder.parameters():
-        #     print(p.requires_grad)
-        #     print(p.grad)
-        #     print(p.is_leaf)
-        # print('-------------------')
-        # for p in self.scorer.parameters():
-        #     print(p.requires_grad)
-        #     print(p.grad)
-        #     print(p.is_leaf)
-        # exit()
-        # print("----------------y_hat-------------------")
-        # print(y_hat)
-        # print("----------------race_hat-------------------")
-        # print(race_hat)
-        # print("----------------sent_label-------------------")
-        # print(sent_label)
-        # print(sent_label.shape)
-        # print("----------------race_label-------------------")
-        # print(race_label)
-        # print(race_label.shape)
-        # print("----------------vec-------------------")
-        # print(vec)
-        # print(vec.dtype)
-        # exit()
-        # print('-----------------------------------------------------------------')
-        # print((enc_moji1-enc_moji2).norm(p=2))
-        # print('-----------------------------------------------------------------')
-        # exit()
-        # print(sent_label)
-        # print(race_label)
-        # print(race_hat1.size())
-        # print(sent_label.size())
-        # print(race_label.size())
-        # exit()
+        
         if sent_label is not None:
             self.metrics['sent_accuracy'](y_hat, sent_label)
             self.metrics['f1'](torch.nn.functional.softmax(scores, dim=1), sent_label)
@@ -648,25 +609,6 @@ class AdversarialOnBottomEmbed(Model):
                             self.encode_sentence['race_label'] = race_label_np
             else:
                 scores = self.scorer(enc_moji)
-            # if self.if_extract_feature:
-            if False:
-                enc_moji_np = copy.deepcopy(enc_moji).cpu().numpy()
-                try:
-                    self.encode_sentence['enc_moji'] = np.concatenate((self.encode_sentence['enc_moji'],enc_moji_np))
-                except KeyError:
-                    self.encode_sentence['enc_moji'] = enc_moji_np
-                
-                sent_label_np = copy.deepcopy(sent_label).cpu().numpy()
-                try:
-                    self.encode_sentence['sent_label'] = np.concatenate((self.encode_sentence['sent_label'], sent_label_np))
-                except KeyError:
-                    self.encode_sentence['sent_label'] = sent_label_np
-
-                race_label_np = copy.deepcopy(race_label).cpu().numpy()
-                try:
-                    self.encode_sentence['race_label'] = np.concatenate((self.encode_sentence['race_label'], race_label_np))
-                except KeyError:
-                    self.encode_sentence['race_label'] = race_label_np
 
             with torch.no_grad():
                 race_hat = torch.argmax(self.protectClassifier(enc_moji),dim=1)

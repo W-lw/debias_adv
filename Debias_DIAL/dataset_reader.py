@@ -157,53 +157,6 @@ class SentimentRaceDataReader(DatasetReader):
             fields["race_label"] = LabelField(race_label,label_namespace="race_labels")
         return Instance(fields)
 
-
-    # def get_sentences(self, file_path="./data/sent_race/"):
-    #     total = self.n
-    #     with open(file_path + 'vocab', 'r',encoding="utf-8") as f:
-    #         vocab = f.readlines()
-    #         vocab = list(map(lambda s: s.strip(), vocab))
-
-    #     def to_words(sen):
-    #         s = []
-    #         for w in sen:
-    #             s.append(vocab[w])
-    #         return s
-        
-    #     with open(file_path + 'pos_pos', 'r') as f:
-    #         pos_pos = f.readlines()
-    #         pos_pos = [map(int, sen.split(' ')) for sen in pos_pos]
-    #         pos_pos = pos_pos[:total]
-    #         pos_pos = map(to_words, pos_pos)
-    #     with open(file_path + 'pos_neg', 'r') as f:
-    #         pos_neg = f.readlines()
-    #         pos_neg = [map(int, sen.split(' ')) for sen in pos_neg]
-    #         pos_neg = pos_neg[:total]
-    #         pos_neg = map(to_words, pos_neg)
-    #     with open(file_path + 'neg_pos', 'r') as f:
-    #         neg_pos = f.readlines()
-    #         neg_pos = [map(int, sen.split(' ')) for sen in neg_pos]
-    #         neg_pos = neg_pos[:total]
-    #         neg_pos = map(to_words, neg_pos)
-    #     with open(file_path + 'neg_neg', 'r') as f:
-    #         neg_neg = f.readlines()
-    #         neg_neg = [map(int, sen.split(' ')) for sen in neg_neg]
-    #         neg_neg = neg_neg[:total]
-    #         neg_neg = map(to_words, neg_neg)
-    #     def sent_join(sents,nums=44000):
-    #         a = []
-    #         i=0
-    #         for s in sents:
-    #             # try:
-    #             a.append(' '.join(s))
-    #             # if(i<10):
-    #             #     print(a[i])
-    #             # i+=1
-    #             # except:
-    #                 # print (s)
-    #         return a[:nums]
-    #     return sent_join(pos_pos), sent_join(pos_neg), sent_join(neg_pos), sent_join(neg_neg)
-
     def get_sentences(self,filePath="./data/sent_race/"):
         pos_pos = []
         pos_neg = []

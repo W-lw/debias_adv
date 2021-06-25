@@ -1,0 +1,43 @@
+{
+    "random_seed": 1,
+    "numpy_seed": 1,
+    "pytorch_seed": 1,
+    "train_protected":"train_main_classifier",
+    "validate_protected":"dev_main_classifier",
+    "test_protected":"test_main_classifier",
+    "dataset_reader": {
+        "type": "SentimentRaceDataReader",
+        "ratio":0.5,
+        "randomseed":1
+    },
+    "model":{
+        "type":"main_adv_embed_classify",
+        "TorchMojiPath":"./data/mojiModel/pytorch_model.bin",
+        "ProtectClassifierPath": "./output/protected/best.th",
+        "fixMojiParams":true,
+        "fixProtectParams": true,
+        "add_attack_noise": true,
+        "if_test_adv": false,
+        "hidden_size":300,
+        "loss_type": "CrossEntropyLoss",
+        "noise_norm": 0.08,
+        "if_extract_feature":true
+        },
+    "iterator":{
+        "type":"basic",
+        "batch_size": 512
+    },
+    "trainer":{
+        "num_epochs":50,
+        "optimizer":{
+            "type":"adam",
+            "lr": 0.001
+        },
+        "patience":2,
+        "cuda_device":0,
+        "grad_norm":1.0,
+        "validation_metric":"-GAP_RMS",
+        "shuffle": true,
+        "num_serialized_models_to_keep":1
+    }
+}
